@@ -4,7 +4,7 @@ const FILES_TO_CACHE = [
     "/",
     "/index.js",
     "/db.js",
-    "style.css",
+    "styles.css",
     "/icons/icon-192x192.png",
     "/icons/icon-512x512.png",
     "manifest.webmanifest",
@@ -13,9 +13,8 @@ const FILES_TO_CACHE = [
 
 // install
 self.addEventListener("install", function (event) {
-    event.waitUntil(caches
-        .open(CACHE_NAME)
-        .then((cache) => cache.addAll(FILES_TO_CACHE)))
+    event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(FILES_TO_CACHE)))
+    
     self.skipWaiting()
 })
 
