@@ -2,6 +2,7 @@ const CACHE_NAME = "static-cache-v2"
 const DATA_CACHE_NAME = "data-cache-v1"
 const FILES_TO_CACHE = [
     "/",
+    "index.html",
     "/index.js",
     "/db.js",
     "styles.css",
@@ -14,7 +15,7 @@ const FILES_TO_CACHE = [
 // install
 self.addEventListener("install", function (event) {
     event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(FILES_TO_CACHE)))
-    
+
     self.skipWaiting()
 })
 
@@ -32,6 +33,7 @@ self.addEventListener("activate", function (event) {
             );
         })
     );
+    
     self.clients.claim();
 });
 
@@ -45,6 +47,7 @@ self.addEventListener("fetch", function (event) {
                         if (response.status === 200) {
                             cache.put(event.request.url, response.clone());
                         }
+
                         return response;
                     })
                     .catch(err => {
@@ -52,8 +55,10 @@ self.addEventListener("fetch", function (event) {
                     });
             }).catch(err => console.log(err))
         );
+
         return;
     }
+
     event.respondWith(
         caches.open(CACHE_NAME).then(cache => {
             return cache.match(event.request).then(response => {
